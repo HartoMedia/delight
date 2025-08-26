@@ -1,0 +1,49 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>About</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">About</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="about-container">
+    <!-- App Header -->
+    <div class="app-header">
+      <div class="app-icon">
+        <ion-icon name="apps"></ion-icon>
+      </div>
+      <h1 class="app-name">Delight</h1>
+      <p class="version">Version {{version}}</p>
+    </div>
+
+    <!-- Simple Description -->
+    <div class="description">
+      <p>A simple and delightful companion app designed to bring joy to your daily routine.</p>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions">
+      <ion-button expand="block" fill="clear" class="action-button">
+        <ion-icon name="mail" slot="start"></ion-icon>
+        Support
+      </ion-button>
+      <ion-button expand="block" fill="clear" class="action-button">
+        <ion-icon name="document-text" slot="start"></ion-icon>
+        Privacy Policy
+      </ion-button>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>Made with ❤️ • {{getCurrentDate()}}</p>
+    </div>
+  </div>
+</ion-content>

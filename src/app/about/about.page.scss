@@ -1,0 +1,89 @@
+.about-container {
+  padding: 40px 24px;
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.app-header {
+  margin-bottom: 60px;
+  padding-top: 40px;
+}
+
+.app-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 24px;
+  background: var(--ion-color-primary);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-icon ion-icon {
+  font-size: 32px;
+  color: white;
+}
+
+.app-name {
+  font-size: 28px;
+  font-weight: 300;
+  margin: 0 0 16px 0;
+  color: var(--ion-color-dark);
+  letter-spacing: -0.5px;
+}
+
+.version {
+  font-size: 14px;
+  margin: 0;
+  color: var(--ion-color-medium);
+  font-weight: 400;
+}
+
+.description {
+  margin-bottom: 60px;
+
+  p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ion-color-medium-shade);
+    margin: 0;
+    font-weight: 300;
+  }
+}
+
+.actions {
+  margin-bottom: 60px;
+}
+
+.action-button {
+  margin: 12px 0;
+  --color: var(--ion-color-medium-shade);
+  height: 48px;
+  font-weight: 400;
+  font-size: 16px;
+  justify-content: center;
+  text-align: center;
+
+  ion-icon {
+    font-size: 18px;
+    margin-right: 8px;
+  }
+}
+
+.footer {
+  p {
+    font-size: 12px;
+    color: var(--ion-color-medium);
+    margin: 0;
+    font-weight: 300;
+  }
+}
+
+// Dark mode
+@media (prefers-color-scheme: dark) {
+  .app-name {
+    color: var(--ion-color-light);
+  }
+}
