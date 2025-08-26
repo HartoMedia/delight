@@ -16,6 +16,12 @@
           }
         </ion-list>
 
+        <!-- Version Information at bottom -->
+        <div class="version-info">
+          <span class="version">v{{ versionInfo.version }}</span>
+          <span class="separator">•</span>
+          <span class="release-date">{{ versionInfo.releaseDate }}</span>
+        </div>
       </ion-content>
     </ion-menu>
     <ion-router-outlet id="main-content"></ion-router-outlet>
