@@ -25,6 +25,7 @@ import {
   settingsOutline,
   settingsSharp
 } from 'ionicons/icons';
+import { ThemeService } from './services/theme.service';
 
 @Component({
   selector: 'app-root',
@@ -35,9 +36,7 @@ import {
 export class AppComponent implements OnInit {
   public appPages = [
     {title: 'Home', url: '/home', icon: 'home'},
-    {title: 'About', url: '/about', icon: 'information-circle'},
     {title: 'Settings', url: '/settings', icon: 'settings'},
-
   ];
 
   public versionInfo = {
@@ -46,7 +45,7 @@ export class AppComponent implements OnInit {
     versionName: ''
   };
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private themeService: ThemeService) {
     addIcons({
       homeSharp,
       homeOutline,
@@ -56,6 +55,9 @@ export class AppComponent implements OnInit {
       settingsSharp,
       settingsOutline
     });
+
+    // Initialize theme on app startup
+    this.themeService.initializeTheme();
   }
 
   ngOnInit() {

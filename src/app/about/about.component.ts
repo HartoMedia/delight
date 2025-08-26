@@ -1,22 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import {
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonMenuButton,
-  IonTitle,
-  IonToolbar,
-  IonIcon,
-  IonButton
-} from '@ionic/angular/standalone';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule, Location} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {HttpClient} from '@angular/common/http';
+import {IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonTitle, IonToolbar} from '@ionic/angular/standalone';
+import {addIcons} from 'ionicons';
+import {arrowBack} from 'ionicons/icons';
 
 @Component({
   selector: 'app-about',
-  templateUrl: './about.page.html',
-  styleUrls: ['./about.page.scss'],
+  templateUrl: './about.component.html',
+  styleUrls: ['./about.component.scss'],
   standalone: true,
   imports: [
     IonContent,
@@ -26,16 +19,17 @@ import {
     CommonModule,
     FormsModule,
     IonButtons,
-    IonMenuButton,
     IonIcon,
     IonButton
   ]
 })
-export class AboutPage implements OnInit {
+export class AboutComponent implements OnInit {
 
   version: string = '...';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private location: Location) {
+    addIcons({arrowBack});
+  }
 
   ngOnInit() {
     this.loadVersion();
@@ -55,6 +49,10 @@ export class AboutPage implements OnInit {
 
   getCurrentDate(): string {
     return new Date().toLocaleDateString();
+  }
+
+  goBack() {
+    this.location.back();
   }
 
 }
