@@ -30,6 +30,34 @@
         </div>
       </div>
     </div>
+
+    <!-- Delight-Liste -->
+    <div class="delights-section" *ngIf="existingDelights.length > 0">
+      <h3>Deine Delights</h3>
+      <ion-list>
+        <ion-card *ngFor="let delight of existingDelights" class="delight-card">
+          <ion-card-header>
+            <div class="delight-header">
+              <span class="delight-emoji">{{ delight.emoji }}</span>
+              <div class="delight-meta">
+                <small class="delight-date">{{ formatDate(delight.createdAt) }}</small>
+              </div>
+            </div>
+          </ion-card-header>
+          <ion-card-content *ngIf="delight.description">
+            <p class="delight-description">{{ delight.description }}</p>
+          </ion-card-content>
+          <ion-card-content *ngIf="delight.imageBase64" class="image-content">
+            <img [src]="delight.imageBase64" alt="Delight Bild" class="delight-image">
+          </ion-card-content>
+        </ion-card>
+      </ion-list>
+    </div>
+
+    <!-- Nachricht wenn keine Delights vorhanden -->
+    <div class="no-delights" *ngIf="existingDelights.length === 0">
+      <p>Noch keine Delights vorhanden. Wähle ein Emoji oben aus, um dein erstes Delight zu erstellen!</p>
+    </div>
   </div>
 
   <!-- Modal für Delight-Eingabe -->
