@@ -1,25 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 import {
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonMenuButton,
-  IonTitle,
-  IonToolbar,
-  IonModal,
   IonButton,
-  IonItem,
-  IonLabel,
-  IonTextarea,
-  IonList,
+  IonButtons,
   IonCard,
   IonCardContent,
   IonCardHeader,
-  IonCardTitle
+  IonContent,
+  IonHeader,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonMenuButton,
+  IonModal,
+  IonTextarea,
+  IonTitle,
+  IonToolbar
 } from '@ionic/angular/standalone';
-import { DelightService, Delight } from '../services/delight-service';
+import {Delight, DelightService} from '../services/delight-service';
 
 @Component({
   selector: 'app-home',
@@ -42,8 +41,7 @@ import { DelightService, Delight } from '../services/delight-service';
     IonList,
     IonCard,
     IonCardContent,
-    IonCardHeader,
-    IonCardTitle
+    IonCardHeader
   ]
 })
 export class HomePage implements OnInit {
@@ -53,7 +51,8 @@ export class HomePage implements OnInit {
   description = '';
   existingDelights: Delight[] = [];
 
-  constructor(private delightService: DelightService) { }
+  constructor(private delightService: DelightService) {
+  }
 
   ngOnInit() {
     this.loadEmojiConfiguration();

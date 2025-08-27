@@ -1,21 +1,8 @@
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import {
-  IonButton,
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonInput,
-  IonItem,
-  IonLabel,
-  IonModal,
-  IonTextarea,
-  IonTitle,
-  IonToolbar,
-  ModalController
-} from '@ionic/angular/standalone';
-import { DelightService } from '../../services/delight-service';
+import {Component, Input} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {ModalController} from '@ionic/angular/standalone';
+import {DelightService} from '../../services/delight-service';
 
 @Component({
   selector: 'app-delight-modal',
@@ -23,18 +10,7 @@ import { DelightService } from '../../services/delight-service';
   styleUrls: ['./delight-modal.component.scss'],
   imports: [
     CommonModule,
-    FormsModule,
-    IonModal,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonButtons,
-    IonButton,
-    IonContent,
-    IonItem,
-    IonLabel,
-    IonTextarea,
-    IonInput
+    FormsModule
   ]
 })
 export class DelightModalComponent {
@@ -45,7 +21,8 @@ export class DelightModalComponent {
   constructor(
     private modalController: ModalController,
     private delightService: DelightService
-  ) {}
+  ) {
+  }
 
   closeModal() {
     this.modalController.dismiss();
@@ -60,6 +37,6 @@ export class DelightModalComponent {
     };
 
     this.delightService.createDelight(delightData);
-    this.modalController.dismiss({ saved: true });
+    this.modalController.dismiss({saved: true});
   }
 }
