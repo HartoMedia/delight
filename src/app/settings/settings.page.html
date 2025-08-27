@@ -28,6 +28,10 @@
 
   <ion-list-header>General</ion-list-header>
   <ion-list [inset]="true">
+    <ion-item [button]="true" (click)="navigateToEmojiConfig()">
+      <ion-label>Emoji Konfiguration</ion-label>
+      <ion-icon name="chevron-forward" slot="end" *ngIf="isAndroid"></ion-icon>
+    </ion-item>
     <ion-item [button]="true">
       <ion-label>Notifications</ion-label>
       <ion-icon name="chevron-forward" slot="end" *ngIf="isAndroid"></ion-icon>
@@ -36,10 +40,10 @@
       <ion-label>Privacy</ion-label>
       <ion-icon name="chevron-forward" slot="end" *ngIf="isAndroid"></ion-icon>
     </ion-item>
-      <ion-item [button]="true" (click)="navigateToAbout()">
-        <ion-label>About</ion-label>
-        <ion-icon name="chevron-forward" slot="end" *ngIf="isAndroid"></ion-icon>
-      </ion-item>
+    <ion-item [button]="true" (click)="navigateToAbout()">
+      <ion-label>About</ion-label>
+      <ion-icon name="chevron-forward" slot="end" *ngIf="isAndroid"></ion-icon>
+    </ion-item>
   </ion-list>
 
   <ion-list-header>Data Management</ion-list-header>

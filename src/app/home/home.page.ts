@@ -7,14 +7,21 @@ import {IonButtons, IonContent, IonHeader, IonMenuButton, IonTitle, IonToolbar} 
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
-  standalone: true,
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButtons, IonMenuButton]
 })
 export class HomePage implements OnInit {
+  emojis: string[] = ['😀', '😊', '🎉', '❤️', '🌟', '🚀', '🎨', '🌈'];
 
   constructor() { }
 
   ngOnInit() {
+    this.loadEmojiConfiguration();
   }
 
+  loadEmojiConfiguration() {
+    const savedEmojis = localStorage.getItem('emoji-configuration');
+    if (savedEmojis) {
+      this.emojis = JSON.parse(savedEmojis);
+    }
+  }
 }

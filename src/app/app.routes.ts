@@ -18,4 +18,8 @@ export const routes: Routes = [
     path: 'about',
     loadComponent: () => import('./about/about.component').then( m => m.AboutComponent)
   },
+  {
+    path: 'emoji-config',
+    loadComponent: () => import('./emoji-config/emoji-config.page').then( m => m.EmojiConfigPage)
+  },
 ];

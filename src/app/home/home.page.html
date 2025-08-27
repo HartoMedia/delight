@@ -13,4 +13,19 @@
       <ion-title size="large">Delights</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <div class="ion-padding">
+    <div class="emoji-card">
+      <div class="card-content">
+        <div class="emoji-grid">
+          <div class="emoji-row">
+            <span class="emoji-item" *ngFor="let emoji of emojis.slice(0, 4)">{{emoji}}</span>
+          </div>
+          <div class="emoji-row">
+            <span class="emoji-item" *ngFor="let emoji of emojis.slice(4, 8)">{{emoji}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </ion-content>

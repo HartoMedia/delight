@@ -1,0 +1,142 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Emoji Konfiguration</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Emoji Konfiguration</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="ion-padding">
+    <div class="config-card">
+      <div class="card-header">
+        <h2>Emoji Grid bearbeiten</h2>
+        <p>Tippen Sie auf ein Emoji um es zu ändern</p>
+      </div>
+      <div class="card-content">
+        <div class="emoji-grid">
+          <div class="emoji-row">
+            <span class="emoji-item" [class.selected]="selectedIndex === 0" (click)="selectEmoji(0)">{{ emojis[0] }}</span>
+            <span class="emoji-item" [class.selected]="selectedIndex === 1" (click)="selectEmoji(1)">{{ emojis[1] }}</span>
+            <span class="emoji-item" [class.selected]="selectedIndex === 2" (click)="selectEmoji(2)">{{ emojis[2] }}</span>
+            <span class="emoji-item" [class.selected]="selectedIndex === 3" (click)="selectEmoji(3)">{{ emojis[3] }}</span>
+          </div>
+          <div class="emoji-row">
+            <span class="emoji-item" [class.selected]="selectedIndex === 4" (click)="selectEmoji(4)">{{ emojis[4] }}</span>
+            <span class="emoji-item" [class.selected]="selectedIndex === 5" (click)="selectEmoji(5)">{{ emojis[5] }}</span>
+            <span class="emoji-item" [class.selected]="selectedIndex === 6" (click)="selectEmoji(6)">{{ emojis[6] }}</span>
+            <span class="emoji-item" [class.selected]="selectedIndex === 7" (click)="selectEmoji(7)">{{ emojis[7] }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="emoji-picker-card" *ngIf="selectedIndex !== -1">
+      <div class="card-header">
+        <h3>Emoji auswählen</h3>
+      </div>
+      <div class="card-content">
+        <div class="emoji-picker">
+          <span class="picker-emoji" (click)="changeEmoji('😀')">😀</span>
+          <span class="picker-emoji" (click)="changeEmoji('😊')">😊</span>
+          <span class="picker-emoji" (click)="changeEmoji('😂')">😂</span>
+          <span class="picker-emoji" (click)="changeEmoji('🥰')">🥰</span>
+          <span class="picker-emoji" (click)="changeEmoji('😍')">😍</span>
+          <span class="picker-emoji" (click)="changeEmoji('🤩')">🤩</span>
+          <span class="picker-emoji" (click)="changeEmoji('🥳')">🥳</span>
+          <span class="picker-emoji" (click)="changeEmoji('😎')">😎</span>
+          <span class="picker-emoji" (click)="changeEmoji('🤔')">🤔</span>
+          <span class="picker-emoji" (click)="changeEmoji('😴')">😴</span>
+          <span class="picker-emoji" (click)="changeEmoji('🤯')">🤯</span>
+          <span class="picker-emoji" (click)="changeEmoji('🥺')">🥺</span>
+          <span class="picker-emoji" (click)="changeEmoji('😭')">😭</span>
+          <span class="picker-emoji" (click)="changeEmoji('😡')">😡</span>
+          <span class="picker-emoji" (click)="changeEmoji('🤬')">🤬</span>
+          <span class="picker-emoji" (click)="changeEmoji('😱')">😱</span>
+          <span class="picker-emoji" (click)="changeEmoji('🎉')">🎉</span>
+          <span class="picker-emoji" (click)="changeEmoji('🎊')">🎊</span>
+          <span class="picker-emoji" (click)="changeEmoji('🎈')">🎈</span>
+          <span class="picker-emoji" (click)="changeEmoji('🎁')">🎁</span>
+          <span class="picker-emoji" (click)="changeEmoji('🎂')">🎂</span>
+          <span class="picker-emoji" (click)="changeEmoji('🍰')">🍰</span>
+          <span class="picker-emoji" (click)="changeEmoji('🧁')">🧁</span>
+          <span class="picker-emoji" (click)="changeEmoji('🍭')">🍭</span>
+          <span class="picker-emoji" (click)="changeEmoji('❤️')">❤️</span>
+          <span class="picker-emoji" (click)="changeEmoji('💙')">💙</span>
+          <span class="picker-emoji" (click)="changeEmoji('💚')">💚</span>
+          <span class="picker-emoji" (click)="changeEmoji('💛')">💛</span>
+          <span class="picker-emoji" (click)="changeEmoji('💜')">💜</span>
+          <span class="picker-emoji" (click)="changeEmoji('🧡')">🧡</span>
+          <span class="picker-emoji" (click)="changeEmoji('🖤')">🖤</span>
+          <span class="picker-emoji" (click)="changeEmoji('🤍')">🤍</span>
+          <span class="picker-emoji" (click)="changeEmoji('🌟')">🌟</span>
+          <span class="picker-emoji" (click)="changeEmoji('⭐')">⭐</span>
+          <span class="picker-emoji" (click)="changeEmoji('✨')">✨</span>
+          <span class="picker-emoji" (click)="changeEmoji('💫')">💫</span>
+          <span class="picker-emoji" (click)="changeEmoji('☄️')">☄️</span>
+          <span class="picker-emoji" (click)="changeEmoji('🌙')">🌙</span>
+          <span class="picker-emoji" (click)="changeEmoji('☀️')">☀️</span>
+          <span class="picker-emoji" (click)="changeEmoji('🌈')">🌈</span>
+          <span class="picker-emoji" (click)="changeEmoji('🚀')">🚀</span>
+          <span class="picker-emoji" (click)="changeEmoji('✈️')">✈️</span>
+          <span class="picker-emoji" (click)="changeEmoji('🚗')">🚗</span>
+          <span class="picker-emoji" (click)="changeEmoji('🚲')">🚲</span>
+          <span class="picker-emoji" (click)="changeEmoji('⛵')">⛵</span>
+          <span class="picker-emoji" (click)="changeEmoji('🏰')">🏰</span>
+          <span class="picker-emoji" (click)="changeEmoji('🗽')">🗽</span>
+          <span class="picker-emoji" (click)="changeEmoji('🎡')">🎡</span>
+          <span class="picker-emoji" (click)="changeEmoji('🎨')">🎨</span>
+          <span class="picker-emoji" (click)="changeEmoji('🎭')">🎭</span>
+          <span class="picker-emoji" (click)="changeEmoji('🎪')">🎪</span>
+          <span class="picker-emoji" (click)="changeEmoji('🎬')">🎬</span>
+          <span class="picker-emoji" (click)="changeEmoji('🎮')">🎮</span>
+          <span class="picker-emoji" (click)="changeEmoji('🎯')">🎯</span>
+          <span class="picker-emoji" (click)="changeEmoji('🎲')">🎲</span>
+          <span class="picker-emoji" (click)="changeEmoji('🃏')">🃏</span>
+          <span class="picker-emoji" (click)="changeEmoji('🐶')">🐶</span>
+          <span class="picker-emoji" (click)="changeEmoji('🐱')">🐱</span>
+          <span class="picker-emoji" (click)="changeEmoji('🐸')">🐸</span>
+          <span class="picker-emoji" (click)="changeEmoji('🦄')">🦄</span>
+          <span class="picker-emoji" (click)="changeEmoji('🐧')">🐧</span>
+          <span class="picker-emoji" (click)="changeEmoji('🐻')">🐻</span>
+          <span class="picker-emoji" (click)="changeEmoji('🐼')">🐼</span>
+          <span class="picker-emoji" (click)="changeEmoji('🦊')">🦊</span>
+          <span class="picker-emoji" (click)="changeEmoji('🌺')">🌺</span>
+          <span class="picker-emoji" (click)="changeEmoji('🌻')">🌻</span>
+          <span class="picker-emoji" (click)="changeEmoji('🌷')">🌷</span>
+          <span class="picker-emoji" (click)="changeEmoji('🌹')">🌹</span>
+          <span class="picker-emoji" (click)="changeEmoji('🌸')">🌸</span>
+          <span class="picker-emoji" (click)="changeEmoji('🌼')">🌼</span>
+          <span class="picker-emoji" (click)="changeEmoji('🌿')">🌿</span>
+          <span class="picker-emoji" (click)="changeEmoji('🍀')">🍀</span>
+          <span class="picker-emoji" (click)="changeEmoji('⚽')">⚽</span>
+          <span class="picker-emoji" (click)="changeEmoji('🏀')">🏀</span>
+          <span class="picker-emoji" (click)="changeEmoji('🎾')">🎾</span>
+          <span class="picker-emoji" (click)="changeEmoji('🏈')">🏈</span>
+          <span class="picker-emoji" (click)="changeEmoji('🏐')">🏐</span>
+          <span class="picker-emoji" (click)="changeEmoji('🏓')">🏓</span>
+          <span class="picker-emoji" (click)="changeEmoji('🎳')">🎳</span>
+          <span class="picker-emoji" (click)="changeEmoji('⛳')">⛳</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <ion-button expand="block" (click)="saveConfiguration()">
+        <ion-icon name="save" slot="start"></ion-icon>
+        Speichern
+      </ion-button>
+      <ion-button expand="block" fill="outline" (click)="resetToDefault()">
+        <ion-icon name="refresh" slot="start"></ion-icon>
+        Zurücksetzen
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

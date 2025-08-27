@@ -77,6 +77,10 @@ export class SettingsPage implements OnInit {
     this.router.navigate(['/about']);
   }
 
+  navigateToEmojiConfig() {
+    this.router.navigate(['/emoji-config']);
+  }
+
   async clearAllData() {
     const alert = await this.alertController.create({
       header: 'Alle Daten löschen',
