@@ -22,13 +22,55 @@
       <div class="card-content">
         <div class="emoji-grid">
           <div class="emoji-row">
-            <span class="emoji-item" *ngFor="let emoji of emojis.slice(0, 4)">{{emoji}}</span>
+            <span class="emoji-item" *ngFor="let emoji of emojis.slice(0, 4)" (click)="onEmojiClick(emoji)">{{emoji}}</span>
           </div>
           <div class="emoji-row">
-            <span class="emoji-item" *ngFor="let emoji of emojis.slice(4, 8)">{{emoji}}</span>
+            <span class="emoji-item" *ngFor="let emoji of emojis.slice(4, 8)" (click)="onEmojiClick(emoji)">{{emoji}}</span>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Modal für Delight-Eingabe -->
+  <ion-modal [isOpen]="isModalOpen" (didDismiss)="closeModal()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Delight hinzufügen</ion-title>
+          <ion-buttons slot="end">
+            <ion-button fill="clear" (click)="closeModal()">
+              Abbrechen
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding">
+        <div class="modal-content">
+          <div class="emoji-display">
+            <span class="selected-emoji">{{ selectedEmoji }}</span>
+          </div>
+
+          <ion-item>
+            <ion-label position="stacked">Beschreibung (optional)</ion-label>
+            <ion-textarea
+              [(ngModel)]="description"
+              placeholder="Was hat dir gefallen? Beschreibe dein Delight..."
+              rows="4">
+            </ion-textarea>
+          </ion-item>
+
+          <div class="button-container">
+            <ion-button
+              expand="block"
+              color="primary"
+              (click)="saveDelight()">
+              Speichern
+            </ion-button>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

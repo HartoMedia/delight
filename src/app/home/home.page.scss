@@ -40,11 +40,17 @@
   cursor: pointer;
   transition: transform 0.2s ease;
   border-radius: 8px;
+  user-select: none; /* Verhindert Textauswahl beim Klicken */
 }
 
 .emoji-item:hover {
   transform: scale(1.2);
   background: rgba(var(--ion-color-primary-rgb), 0.1);
+}
+
+.emoji-item:active {
+  transform: scale(1.1);
+  background: rgba(var(--ion-color-primary-rgb), 0.2);
 }
 
 .question-text {
@@ -58,4 +64,35 @@
   font-weight: 600;
   margin: 0;
   line-height: 1.3;
+}
+
+/* Modal Styles */
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 0;
+}
+
+.emoji-display {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.selected-emoji {
+  font-size: 60px;
+  display: inline-block;
+  padding: 20px;
+  background: var(--ion-color-light);
+  border-radius: 50%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.button-container {
+  margin-top: 20px;
+}
+
+ion-textarea {
+  --padding-start: 0;
+  --padding-end: 0;
 }
