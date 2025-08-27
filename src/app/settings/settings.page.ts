@@ -15,11 +15,13 @@ import {
   IonItem,
   IonToggle,
   IonLabel,
-  IonIcon
+  IonIcon,
+  AlertController
 } from '@ionic/angular/standalone';
 import {addIcons} from 'ionicons';
-import {chevronForward} from 'ionicons/icons';
+import {chevronForward, trash} from 'ionicons/icons';
 import {ThemeService} from '../services/theme.service';
+import {DelightService} from '../services/delight-service';
 
 @Component({
   selector: 'app-settings',
@@ -47,8 +49,14 @@ export class SettingsPage implements OnInit {
   paletteToggle = false;
   isAndroid = false;
 
-  constructor(private themeService: ThemeService, private platform: Platform, private router: Router) {
-    addIcons({chevronForward});
+  constructor(
+    private themeService: ThemeService,
+    private platform: Platform,
+    private router: Router,
+    private delightService: DelightService,
+    private alertController: AlertController
+  ) {
+    addIcons({chevronForward, trash});
   }
 
   ngOnInit() {
@@ -67,5 +75,72 @@ export class SettingsPage implements OnInit {
 
   navigateToAbout() {
     this.router.navigate(['/about']);
+  }
+
+  async clearAllData() {
+    const alert = await this.alertController.create({
+      header: 'Alle Daten löschen',
+      message: 'Möchten Sie wirklich alle Delights und Daten aus dem Local Storage löschen? Diese Aktion kann nicht rückgängig gemacht werden.',
+      buttons: [
+        {
+          text: 'Abbrechen',
+          role: 'cancel'
+        },
+        {
+          text: 'Löschen',
+          role: 'destructive',
+          handler: () => {
+            this.performDataClear();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  private performDataClear() {
+    try {
+      // Lösche alle Delights über den Service
+      this.delightService.deleteAllDelights();
+
+      // Lösche zusätzlich alle anderen App-Daten aus dem Local Storage
+      const keysToRemove = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key) {
+          keysToRemove.push(key);
+        }
+      }
+
+      keysToRemove.forEach(key => {
+        localStorage.removeItem(key);
+      });
+
+      this.presentSuccessAlert();
+    } catch (error) {
+      console.error('Fehler beim Löschen der Daten:', error);
+      this.presentErrorAlert();
+    }
+  }
+
+  private async presentSuccessAlert() {
+    const alert = await this.alertController.create({
+      header: 'Erfolgreich',
+      message: 'Alle Daten wurden erfolgreich gelöscht.',
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
+
+  private async presentErrorAlert() {
+    const alert = await this.alertController.create({
+      header: 'Fehler',
+      message: 'Beim Löschen der Daten ist ein Fehler aufgetreten.',
+      buttons: ['OK']
+    });
+
+    await alert.present();
   }
 }
