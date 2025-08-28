@@ -16,9 +16,11 @@ import {
   IonModal,
   IonTextarea,
   IonTitle,
-  IonToolbar
+  IonToolbar,
+  ModalController
 } from '@ionic/angular/standalone';
 import {Delight, DelightService} from '../services/delight-service';
+import {DelightDetailModalComponent} from '../components/delight-detail-modal/delight-detail-modal.component';
 
 @Component({
   selector: 'app-home',
@@ -41,7 +43,8 @@ import {Delight, DelightService} from '../services/delight-service';
     IonList,
     IonCard,
     IonCardContent,
-    IonCardHeader
+    IonCardHeader,
+    DelightDetailModalComponent
   ]
 })
 export class HomePage implements OnInit {
@@ -52,7 +55,14 @@ export class HomePage implements OnInit {
   existingDelights: Delight[] = [];
   capturedImage: string | undefined = undefined;
 
-  constructor(private delightService: DelightService) {
+  // Für das Delight-Detail-Modal
+  isDetailModalOpen = false;
+  selectedDelight: Delight | null = null;
+
+  constructor(
+    private delightService: DelightService,
+    private modalController: ModalController
+  ) {
   }
 
   ngOnInit() {
@@ -101,6 +111,18 @@ export class HomePage implements OnInit {
     console.log('Delight erfolgreich gespeichert!');
     // Lade die Delights neu, um die neue Eingabe anzuzeigen
     this.loadExistingDelights();
+  }
+
+  // Neue Methode für das Öffnen des Detail-Modals
+  async openDelightDetail(delight: Delight) {
+    this.selectedDelight = delight;
+    this.isDetailModalOpen = true;
+  }
+
+  // Neue Methode für das Schließen des Detail-Modals
+  closeDetailModal() {
+    this.isDetailModalOpen = false;
+    this.selectedDelight = null;
   }
 
   formatDate(date: Date): string {

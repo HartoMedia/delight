@@ -35,7 +35,7 @@
     <div class="delights-section" *ngIf="existingDelights.length > 0">
       <h3>Deine Delights</h3>
       <ion-list>
-        <ion-card *ngFor="let delight of existingDelights" class="delight-card">
+        <ion-card *ngFor="let delight of existingDelights" class="delight-card clickable-card" (click)="openDelightDetail(delight)">
           <ion-card-header>
             <div class="delight-header">
               <span class="delight-emoji">{{ delight.emoji }}</span>
@@ -138,4 +138,12 @@
       </ion-content>
     </ng-template>
   </ion-modal>
+
+  <!-- Detail-Modal für Delights -->
+  <app-delight-detail-modal
+    [delight]="selectedDelight!"
+    [isOpen]="isDetailModalOpen"
+    *ngIf="selectedDelight"
+    (didDismiss)="closeDetailModal()">
+  </app-delight-detail-modal>
 </ion-content>

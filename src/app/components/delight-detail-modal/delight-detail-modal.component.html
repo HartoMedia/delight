@@ -1,0 +1,78 @@
+<ion-modal [isOpen]="isOpen" (didDismiss)="closeModal()">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Delight Details</ion-title>
+        <ion-buttons slot="end">
+          <ion-button fill="clear" (click)="closeModal()">
+            <ion-icon name="close"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="ion-padding">
+      <div class="delight-detail-container" *ngIf="delight">
+        <!-- Emoji Header -->
+        <div class="emoji-header">
+          <span class="large-emoji">{{ delight.emoji }}</span>
+        </div>
+
+        <!-- Beschreibung -->
+        <ion-card *ngIf="delight.description">
+          <ion-card-header>
+            <h3>Beschreibung</h3>
+          </ion-card-header>
+          <ion-card-content>
+            <p class="description-text">{{ delight.description }}</p>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- Bild -->
+        <ion-card *ngIf="delight.imageBase64" class="image-card">
+          <ion-card-header>
+            <h3>
+              <ion-icon name="image"></ion-icon>
+              Foto
+            </h3>
+          </ion-card-header>
+          <ion-card-content class="image-container">
+            <img [src]="delight.imageBase64" alt="Delight Bild" class="detail-image">
+          </ion-card-content>
+        </ion-card>
+
+        <!-- Metadaten -->
+        <ion-card>
+          <ion-card-header>
+            <h3>Details</h3>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-item lines="none">
+              <ion-icon name="calendar" slot="start"></ion-icon>
+              <ion-label>
+                <h4>Erstellt am</h4>
+                <p>{{ formatDate(delight.createdAt) }}</p>
+              </ion-label>
+            </ion-item>
+
+            <ion-item lines="none" *ngIf="delight.updatedAt && delight.updatedAt.getTime() !== delight.createdAt.getTime()">
+              <ion-icon name="calendar" slot="start"></ion-icon>
+              <ion-label>
+                <h4>Zuletzt bearbeitet</h4>
+                <p>{{ formatDate(delight.updatedAt) }}</p>
+              </ion-label>
+            </ion-item>
+
+            <ion-item lines="none">
+              <ion-icon name="pricetag" slot="start"></ion-icon>
+              <ion-label>
+                <h4>Tags</h4>
+                <p>{{ formatTags(delight.tags) }}</p>
+              </ion-label>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
