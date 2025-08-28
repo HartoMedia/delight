@@ -89,6 +89,43 @@
             </ion-textarea>
           </ion-item>
 
+          <!-- Foto-Sektion -->
+          <div class="photo-section">
+            <ion-label>
+              <h3>Foto hinzufügen (optional)</h3>
+            </ion-label>
+
+            <!-- Foto-Buttons -->
+            <div class="photo-buttons" *ngIf="!capturedImage">
+              <ion-button
+                fill="outline"
+                color="primary"
+                (click)="capturePhoto()"
+                class="photo-button">
+                📷 Foto aufnehmen
+              </ion-button>
+              <ion-button
+                fill="outline"
+                color="secondary"
+                (click)="selectFromGallery()"
+                class="photo-button">
+                🖼️ Aus Galerie wählen
+              </ion-button>
+            </div>
+
+            <!-- Bildvorschau -->
+            <div class="image-preview" *ngIf="capturedImage">
+              <img [src]="capturedImage" alt="Ausgewähltes Bild" class="preview-image">
+              <ion-button
+                fill="clear"
+                color="danger"
+                (click)="removeImage()"
+                class="remove-image-button">
+                ❌ Bild entfernen
+              </ion-button>
+            </div>
+          </div>
+
           <div class="button-container">
             <ion-button
               expand="block"

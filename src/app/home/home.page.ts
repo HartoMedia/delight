@@ -50,6 +50,7 @@ export class HomePage implements OnInit {
   selectedEmoji = '';
   description = '';
   existingDelights: Delight[] = [];
+  capturedImage: string | undefined = undefined;
 
   constructor(private delightService: DelightService) {
   }
@@ -84,6 +85,7 @@ export class HomePage implements OnInit {
     this.isModalOpen = false;
     this.selectedEmoji = '';
     this.description = '';
+    this.capturedImage = undefined;
   }
 
   saveDelight() {
@@ -91,7 +93,7 @@ export class HomePage implements OnInit {
       emoji: this.selectedEmoji,
       description: this.description || '',
       tags: [],
-      imageBase64: undefined
+      imageBase64: this.capturedImage
     };
 
     this.delightService.createDelight(delightData);
@@ -109,5 +111,71 @@ export class HomePage implements OnInit {
       hour: '2-digit',
       minute: '2-digit'
     });
+  }
+
+  // Neue Methoden für Foto-Funktionalität
+  async capturePhoto() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: 'environment' // Rückkamera bevorzugen
+        }
+      });
+
+      // Erstelle ein Video-Element für die Kamera-Vorschau
+      const video = document.createElement('video');
+      video.srcObject = stream;
+      video.play();
+
+      // Warte bis das Video geladen ist
+      video.addEventListener('loadedmetadata', () => {
+        // Erstelle ein Canvas-Element zum Aufnehmen des Fotos
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        // Zeichne das aktuelle Video-Frame auf das Canvas
+        context?.drawImage(video, 0, 0);
+
+        // Konvertiere zu Base64
+        this.capturedImage = canvas.toDataURL('image/jpeg', 0.8);
+
+        // Stoppe die Kamera
+        stream.getTracks().forEach(track => track.stop());
+      });
+    } catch (error) {
+      console.error('Fehler beim Zugriff auf die Kamera:', error);
+      alert('Kamera-Zugriff nicht möglich. Bitte überprüfen Sie die Berechtigungen.');
+    }
+  }
+
+  async selectFromGallery() {
+    try {
+      // Erstelle ein verstecktes File-Input-Element
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+
+      input.addEventListener('change', (event) => {
+        const file = (event.target as HTMLInputElement).files?.[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            this.capturedImage = e.target?.result as string;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      input.click();
+    } catch (error) {
+      console.error('Fehler beim Auswählen des Bildes:', error);
+    }
+  }
+
+  removeImage() {
+    this.capturedImage = undefined;
   }
 }
