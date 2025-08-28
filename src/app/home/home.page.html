@@ -3,147 +3,131 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Delights</ion-title>
+    <ion-title>Delight</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Delights</ion-title>
+      <ion-title size="large">Delight</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <div class="ion-padding">
-    <div class="question-text">
-      <h2>Wie fühlst du dich gerade?</h2>
-    </div>
-    <div class="emoji-card">
-      <div class="card-content">
-        <div class="emoji-grid">
-          <div class="emoji-row">
-            <span class="emoji-item" *ngFor="let emoji of emojis.slice(0, 4)" (click)="onEmojiClick(emoji)">{{emoji}}</span>
-          </div>
-          <div class="emoji-row">
-            <span class="emoji-item" *ngFor="let emoji of emojis.slice(4, 8)" (click)="onEmojiClick(emoji)">{{emoji}}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Delight-Liste -->
-    <div class="delights-section" *ngIf="existingDelights.length > 0">
-      <h3>Deine Delights</h3>
-      <ion-list>
-        <ion-card *ngFor="let delight of existingDelights" class="delight-card clickable-card" (click)="openDelightDetail(delight)">
-          <ion-card-header>
-            <div class="delight-header">
-              <span class="delight-emoji">{{ delight.emoji }}</span>
-              <div class="delight-meta">
-                <small class="delight-date">{{ formatDate(delight.createdAt) }}</small>
-              </div>
-            </div>
-          </ion-card-header>
-          <ion-card-content *ngIf="delight.description">
-            <p class="delight-description">{{ delight.description }}</p>
-          </ion-card-content>
-          <ion-card-content *ngIf="delight.imageBase64" class="image-content">
-            <img [src]="delight.imageBase64" alt="Delight Bild" class="delight-image">
-          </ion-card-content>
-        </ion-card>
-      </ion-list>
-    </div>
-
-    <!-- Nachricht wenn keine Delights vorhanden -->
-    <div class="no-delights" *ngIf="existingDelights.length === 0">
-      <p>Noch keine Delights vorhanden. Wähle ein Emoji oben aus, um dein erstes Delight zu erstellen!</p>
-    </div>
+  <!-- Emoji-Auswahl -->
+  <div class="emoji-grid">
+    <button
+      *ngFor="let emoji of emojis"
+      class="emoji-button"
+      (click)="onEmojiClick(emoji)">
+      {{emoji}}
+    </button>
   </div>
 
-  <!-- Modal für Delight-Eingabe -->
+  <!-- Bestehende Delights -->
+  <ion-list *ngIf="existingDelights.length > 0">
+    <ion-item
+      *ngFor="let delight of existingDelights"
+      button
+      (click)="openDelightDetail(delight)">
+      <ion-label>
+        <h2>{{delight.emoji}} {{delight.description}}</h2>
+        <p>{{formatDate(delight.createdAt)}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <!-- Modal für neues Delight -->
   <ion-modal [isOpen]="isModalOpen" (didDismiss)="closeModal()">
     <ng-template>
       <ion-header>
         <ion-toolbar>
-          <ion-title>Delight hinzufügen</ion-title>
+          <ion-title>Neues Delight {{selectedEmoji}}</ion-title>
           <ion-buttons slot="end">
-            <ion-button fill="clear" (click)="closeModal()">
-              Abbrechen
+            <ion-button (click)="closeModal()">
+              <ion-icon name="close"></ion-icon>
             </ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
 
       <ion-content class="ion-padding">
-        <div class="modal-content">
-          <div class="emoji-display">
-            <span class="selected-emoji">{{ selectedEmoji }}</span>
-          </div>
+        <!-- Kamera-Bereich -->
+        <div class="camera-section">
+          <!-- Kamera-Vorschau -->
+          <div *ngIf="isCameraOpen" class="camera-preview">
+            <video #video autoplay playsinline class="camera-video"></video>
+            <canvas #canvas style="display: none;"></canvas>
 
-          <ion-item>
-            <ion-label position="stacked">Beschreibung (optional)</ion-label>
-            <ion-textarea
-              [(ngModel)]="description"
-              placeholder="Was hat dir gefallen? Beschreibe dein Delight..."
-              rows="4">
-            </ion-textarea>
-          </ion-item>
-
-          <!-- Foto-Sektion -->
-          <div class="photo-section">
-            <ion-label>
-              <h3>Foto hinzufügen (optional)</h3>
-            </ion-label>
-
-            <!-- Foto-Buttons -->
-            <div class="photo-buttons" *ngIf="!capturedImage">
-              <ion-button
-                fill="outline"
-                color="primary"
-                (click)="capturePhoto()"
-                class="photo-button">
-                📷 Foto aufnehmen
+            <div class="camera-controls">
+              <ion-button fill="clear" (click)="closeCamera()" color="light">
+                <ion-icon name="close"></ion-icon>
               </ion-button>
-              <ion-button
-                fill="outline"
-                color="secondary"
-                (click)="selectFromGallery()"
-                class="photo-button">
-                🖼️ Aus Galerie wählen
-              </ion-button>
-            </div>
-
-            <!-- Bildvorschau -->
-            <div class="image-preview" *ngIf="capturedImage">
-              <img [src]="capturedImage" alt="Ausgewähltes Bild" class="preview-image">
-              <ion-button
-                fill="clear"
-                color="danger"
-                (click)="removeImage()"
-                class="remove-image-button">
-                ❌ Bild entfernen
+              <ion-button fill="solid" (click)="capturePhoto()" color="primary" class="capture-button">
+                <ion-icon name="camera"></ion-icon>
               </ion-button>
             </div>
           </div>
 
-          <div class="button-container">
+          <!-- Aufgenommenes Foto -->
+          <div *ngIf="capturedImage && !isCameraOpen" class="captured-image">
+            <img [src]="capturedImage" alt="Aufgenommenes Foto" class="preview-image">
+
+            <div class="image-controls">
+              <ion-button fill="clear" (click)="removePhoto()" color="danger">
+                <ion-icon name="close"></ion-icon>
+                Entfernen
+              </ion-button>
+              <ion-button fill="clear" (click)="retakePhoto()" color="medium">
+                <ion-icon name="refresh"></ion-icon>
+                Neu aufnehmen
+              </ion-button>
+            </div>
+          </div>
+
+          <!-- Kamera-Button (wenn keine Kamera offen und kein Foto) -->
+          <div *ngIf="!isCameraOpen && !capturedImage" class="camera-button-container">
             <ion-button
-              expand="block"
-              color="primary"
-              (click)="saveDelight()">
-              Speichern
+              *ngIf="isCameraSupported"
+              fill="outline"
+              (click)="openCamera()"
+              class="camera-button">
+              <ion-icon name="camera" slot="start"></ion-icon>
+              Foto aufnehmen
             </ion-button>
+            <p *ngIf="!isCameraSupported" class="camera-not-supported">
+              Kamera wird nicht unterstützt
+            </p>
           </div>
         </div>
+
+        <!-- Beschreibung -->
+        <ion-item>
+          <ion-textarea
+            [(ngModel)]="description"
+            placeholder="Beschreibung (optional)"
+            rows="3"
+            autoGrow="true">
+          </ion-textarea>
+        </ion-item>
+
+        <!-- Speichern-Button -->
+        <ion-button
+          expand="block"
+          (click)="saveDelight()"
+          class="save-button">
+          <ion-icon name="checkmark" slot="start"></ion-icon>
+          Delight speichern
+        </ion-button>
       </ion-content>
     </ng-template>
   </ion-modal>
 
-  <!-- Detail-Modal für Delights -->
+  <!-- Detail-Modal -->
   <app-delight-detail-modal
-    [delight]="selectedDelight!"
-    [isOpen]="isDetailModalOpen"
     *ngIf="selectedDelight"
+    [isOpen]="isDetailModalOpen"
+    [delight]="selectedDelight"
     (didDismiss)="closeDetailModal()">
   </app-delight-detail-modal>
 </ion-content>

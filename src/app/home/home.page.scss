@@ -23,9 +23,11 @@
 }
 
 .emoji-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+  gap: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
 }
 
 .emoji-row {
@@ -51,6 +53,30 @@
 .emoji-item:active {
   transform: scale(1.1);
   background: rgba(var(--ion-color-primary-rgb), 0.2);
+}
+
+.emoji-button {
+  background: var(--ion-color-light);
+  border: 2px solid var(--ion-color-medium);
+  border-radius: 12px;
+  font-size: 2rem;
+  padding: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;
+
+  &:hover {
+    background: var(--ion-color-primary-tint);
+    border-color: var(--ion-color-primary);
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
 }
 
 .question-text {
@@ -205,4 +231,108 @@
 
 .button-container {
   margin-top: 20px;
+}
+
+.camera-section {
+  margin-bottom: 20px;
+}
+
+.camera-preview {
+  position: relative;
+  background: #000;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.camera-video {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  display: block;
+}
+
+.camera-controls {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.capture-button {
+  --border-radius: 50%;
+  --padding-start: 20px;
+  --padding-end: 20px;
+  --padding-top: 20px;
+  --padding-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+.captured-image {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.preview-image {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 15px;
+}
+
+.image-controls {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.camera-button-container {
+  text-align: center;
+  padding: 40px 20px;
+  border: 2px dashed var(--ion-color-medium);
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.camera-button {
+  --padding-start: 20px;
+  --padding-end: 20px;
+  --padding-top: 15px;
+  --padding-bottom: 15px;
+}
+
+.camera-not-supported {
+  color: var(--ion-color-medium);
+  font-style: italic;
+  margin: 0;
+}
+
+.save-button {
+  margin-top: 20px;
+  --padding-start: 20px;
+  --padding-end: 20px;
+  --padding-top: 15px;
+  --padding-bottom: 15px;
+}
+
+// Mobile-spezifische Anpassungen
+@media (max-width: 768px) {
+  .camera-video {
+    height: 250px;
+  }
+
+  .camera-controls {
+    bottom: 15px;
+  }
+
+  .capture-button {
+    --padding-start: 15px;
+    --padding-end: 15px;
+    --padding-top: 15px;
+    --padding-bottom: 15px;
+  }
 }

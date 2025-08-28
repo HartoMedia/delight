@@ -1,14 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {
   IonButton,
   IonButtons,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
   IonContent,
   IonHeader,
+  IonIcon,
   IonItem,
   IonLabel,
   IonList,
@@ -21,6 +19,8 @@ import {
 } from '@ionic/angular/standalone';
 import {Delight, DelightService} from '../services/delight-service';
 import {DelightDetailModalComponent} from '../components/delight-detail-modal/delight-detail-modal.component';
+import {addIcons} from 'ionicons';
+import {camera, close, checkmark, refresh} from 'ionicons/icons';
 
 @Component({
   selector: 'app-home',
@@ -41,19 +41,25 @@ import {DelightDetailModalComponent} from '../components/delight-detail-modal/de
     IonLabel,
     IonTextarea,
     IonList,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
+    IonIcon,
     DelightDetailModalComponent
   ]
 })
 export class HomePage implements OnInit {
+  @ViewChild('video', { static: false }) videoElement!: ElementRef<HTMLVideoElement>;
+  @ViewChild('canvas', { static: false }) canvasElement!: ElementRef<HTMLCanvasElement>;
+
   emojis: string[] = ['😀', '😊', '🎉', '❤️', '🌟', '🚀', '🎨', '🌈'];
   isModalOpen = false;
   selectedEmoji = '';
   description = '';
   existingDelights: Delight[] = [];
   capturedImage: string | undefined = undefined;
+
+  // Kamera-bezogene Eigenschaften
+  isCameraOpen = false;
+  cameraStream: MediaStream | null = null;
+  isCameraSupported = false;
 
   // Für das Delight-Detail-Modal
   isDetailModalOpen = false;
@@ -63,11 +69,17 @@ export class HomePage implements OnInit {
     private delightService: DelightService,
     private modalController: ModalController
   ) {
+    addIcons({ camera, close, checkmark, refresh });
   }
 
   ngOnInit() {
     this.loadEmojiConfiguration();
     this.loadExistingDelights();
+    this.checkCameraSupport();
+  }
+
+  checkCameraSupport() {
+    this.isCameraSupported = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
   }
 
   loadEmojiConfiguration() {
@@ -88,6 +100,7 @@ export class HomePage implements OnInit {
   onEmojiClick(emoji: string) {
     this.selectedEmoji = emoji;
     this.description = '';
+    this.capturedImage = undefined;
     this.isModalOpen = true;
   }
 
@@ -96,6 +109,7 @@ export class HomePage implements OnInit {
     this.selectedEmoji = '';
     this.description = '';
     this.capturedImage = undefined;
+    this.closeCamera();
   }
 
   saveDelight() {
@@ -109,8 +123,82 @@ export class HomePage implements OnInit {
     this.delightService.createDelight(delightData);
     this.closeModal();
     console.log('Delight erfolgreich gespeichert!');
-    // Lade die Delights neu, um die neue Eingabe anzuzeigen
     this.loadExistingDelights();
+  }
+
+  // Kamera-Funktionen
+  async openCamera() {
+    if (!this.isCameraSupported) {
+      console.error('Kamera wird nicht unterstützt');
+      return;
+    }
+
+    try {
+      this.cameraStream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: 'environment', // Rückkamera bevorzugen
+          width: { ideal: 1920 },
+          height: { ideal: 1080 }
+        }
+      });
+
+      this.isCameraOpen = true;
+
+      // Warte einen Moment, bis das View aktualisiert ist
+      setTimeout(() => {
+        if (this.videoElement && this.videoElement.nativeElement) {
+          this.videoElement.nativeElement.srcObject = this.cameraStream;
+          this.videoElement.nativeElement.play();
+        }
+      }, 100);
+    } catch (error) {
+      console.error('Fehler beim Öffnen der Kamera:', error);
+      alert('Fehler beim Zugriff auf die Kamera. Bitte überprüfen Sie die Berechtigungen.');
+    }
+  }
+
+  closeCamera() {
+    if (this.cameraStream) {
+      this.cameraStream.getTracks().forEach(track => track.stop());
+      this.cameraStream = null;
+    }
+    this.isCameraOpen = false;
+  }
+
+  capturePhoto() {
+    if (!this.videoElement || !this.canvasElement || !this.cameraStream) {
+      return;
+    }
+
+    const video = this.videoElement.nativeElement;
+    const canvas = this.canvasElement.nativeElement;
+    const context = canvas.getContext('2d');
+
+    if (!context) {
+      return;
+    }
+
+    // Setze die Canvas-Größe auf die Video-Größe
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    // Zeichne das aktuelle Video-Frame auf die Canvas
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // Konvertiere zu Base64
+    this.capturedImage = canvas.toDataURL('image/jpeg', 0.8);
+
+    // Schließe die Kamera nach dem Foto
+    this.closeCamera();
+  }
+
+  retakePhoto() {
+    this.capturedImage = undefined;
+    this.openCamera();
+  }
+
+  removePhoto() {
+    this.capturedImage = undefined;
   }
 
   // Neue Methode für das Öffnen des Detail-Modals
@@ -133,71 +221,5 @@ export class HomePage implements OnInit {
       hour: '2-digit',
       minute: '2-digit'
     });
-  }
-
-  // Neue Methoden für Foto-Funktionalität
-  async capturePhoto() {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: 'environment' // Rückkamera bevorzugen
-        }
-      });
-
-      // Erstelle ein Video-Element für die Kamera-Vorschau
-      const video = document.createElement('video');
-      video.srcObject = stream;
-      video.play();
-
-      // Warte bis das Video geladen ist
-      video.addEventListener('loadedmetadata', () => {
-        // Erstelle ein Canvas-Element zum Aufnehmen des Fotos
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-
-        // Zeichne das aktuelle Video-Frame auf das Canvas
-        context?.drawImage(video, 0, 0);
-
-        // Konvertiere zu Base64
-        this.capturedImage = canvas.toDataURL('image/jpeg', 0.8);
-
-        // Stoppe die Kamera
-        stream.getTracks().forEach(track => track.stop());
-      });
-    } catch (error) {
-      console.error('Fehler beim Zugriff auf die Kamera:', error);
-      alert('Kamera-Zugriff nicht möglich. Bitte überprüfen Sie die Berechtigungen.');
-    }
-  }
-
-  async selectFromGallery() {
-    try {
-      // Erstelle ein verstecktes File-Input-Element
-      const input = document.createElement('input');
-      input.type = 'file';
-      input.accept = 'image/*';
-
-      input.addEventListener('change', (event) => {
-        const file = (event.target as HTMLInputElement).files?.[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            this.capturedImage = e.target?.result as string;
-          };
-          reader.readAsDataURL(file);
-        }
-      });
-
-      input.click();
-    } catch (error) {
-      console.error('Fehler beim Auswählen des Bildes:', error);
-    }
-  }
-
-  removeImage() {
-    this.capturedImage = undefined;
   }
 }
