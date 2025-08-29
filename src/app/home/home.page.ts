@@ -20,7 +20,7 @@ import {
 import {Delight, DelightService} from '../services/delight-service';
 import {DelightDetailModalComponent} from '../components/delight-detail-modal/delight-detail-modal.component';
 import {addIcons} from 'ionicons';
-import {camera, close, checkmark, refresh} from 'ionicons/icons';
+import {camera, close, checkmark, refresh, trash, cameraReverse} from 'ionicons/icons';
 
 @Component({
   selector: 'app-home',
@@ -60,6 +60,8 @@ export class HomePage implements OnInit {
   isCameraOpen = false;
   cameraStream: MediaStream | null = null;
   isCameraSupported = false;
+  currentFacingMode: 'environment' | 'user' = 'environment';
+  hasMultipleCameras = false;
 
   // Für das Delight-Detail-Modal
   isDetailModalOpen = false;
@@ -69,7 +71,7 @@ export class HomePage implements OnInit {
     private delightService: DelightService,
     private modalController: ModalController
   ) {
-    addIcons({ camera, close, checkmark, refresh });
+    addIcons({ camera, close, checkmark, refresh, trash, cameraReverse });
   }
 
   ngOnInit() {
@@ -78,8 +80,22 @@ export class HomePage implements OnInit {
     this.checkCameraSupport();
   }
 
-  checkCameraSupport() {
-    this.isCameraSupported = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+  async checkCameraSupport() {
+    try {
+      if (navigator.mediaDevices && typeof navigator.mediaDevices.getUserMedia === 'function') {
+        this.isCameraSupported = true;
+
+        // Prüfe ob mehrere Kameras verfügbar sind
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoDevices = devices.filter(device => device.kind === 'videoinput');
+        this.hasMultipleCameras = videoDevices.length > 1;
+      } else {
+        this.isCameraSupported = false;
+      }
+    } catch (error) {
+      console.warn('Fehler beim Ermitteln der Kamera-Unterstützung:', error);
+      this.isCameraSupported = false;
+    }
   }
 
   loadEmojiConfiguration() {
@@ -136,7 +152,7 @@ export class HomePage implements OnInit {
     try {
       this.cameraStream = await navigator.mediaDevices.getUserMedia({
         video: {
-          facingMode: 'environment', // Rückkamera bevorzugen
+          facingMode: this.currentFacingMode,
           width: { ideal: 1920 },
           height: { ideal: 1080 }
         }
@@ -155,6 +171,21 @@ export class HomePage implements OnInit {
       console.error('Fehler beim Öffnen der Kamera:', error);
       alert('Fehler beim Zugriff auf die Kamera. Bitte überprüfen Sie die Berechtigungen.');
     }
+  }
+
+  async switchCamera() {
+    if (!this.hasMultipleCameras) return;
+
+    // Wechsle zwischen Front- und Rückkamera
+    this.currentFacingMode = this.currentFacingMode === 'environment' ? 'user' : 'environment';
+
+    // Schließe die aktuelle Kamera und öffne sie mit der neuen Einstellung
+    this.closeCamera();
+
+    // Kurz warten bevor die neue Kamera geöffnet wird
+    setTimeout(() => {
+      this.openCamera();
+    }, 200);
   }
 
   closeCamera() {
@@ -185,20 +216,20 @@ export class HomePage implements OnInit {
     // Zeichne das aktuelle Video-Frame auf die Canvas
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    // Konvertiere zu Base64
-    this.capturedImage = canvas.toDataURL('image/jpeg', 0.8);
+    // Konvertiere zu Base64 mit besserer Qualität
+    this.capturedImage = canvas.toDataURL('image/jpeg', 0.9);
 
     // Schließe die Kamera nach dem Foto
     this.closeCamera();
   }
 
+  removePhoto() {
+    this.capturedImage = undefined;
+  }
+
   retakePhoto() {
     this.capturedImage = undefined;
     this.openCamera();
-  }
-
-  removePhoto() {
-    this.capturedImage = undefined;
   }
 
   // Neue Methode für das Öffnen des Detail-Modals

@@ -28,7 +28,7 @@
   <ion-list *ngIf="existingDelights.length > 0">
     <ion-item
       *ngFor="let delight of existingDelights"
-      button
+      [button]="true"
       (click)="openDelightDetail(delight)">
       <ion-label>
         <h2>{{delight.emoji}} {{delight.description}}</h2>
@@ -60,11 +60,14 @@
             <canvas #canvas style="display: none;"></canvas>
 
             <div class="camera-controls">
-              <ion-button fill="clear" (click)="closeCamera()" color="light">
+              <ion-button fill="clear" (click)="closeCamera()" color="light" size="default">
                 <ion-icon name="close"></ion-icon>
               </ion-button>
-              <ion-button fill="solid" (click)="capturePhoto()" color="primary" class="capture-button">
+              <ion-button fill="solid" (click)="capturePhoto()" color="primary" class="capture-button" size="default">
                 <ion-icon name="camera"></ion-icon>
+              </ion-button>
+              <ion-button fill="clear" (click)="switchCamera()" color="light" size="default" *ngIf="hasMultipleCameras">
+                <ion-icon name="camera-reverse"></ion-icon>
               </ion-button>
             </div>
           </div>
@@ -74,12 +77,12 @@
             <img [src]="capturedImage" alt="Aufgenommenes Foto" class="preview-image">
 
             <div class="image-controls">
-              <ion-button fill="clear" (click)="removePhoto()" color="danger">
-                <ion-icon name="close"></ion-icon>
+              <ion-button fill="clear" (click)="removePhoto()" color="danger" size="default">
+                <ion-icon name="trash" slot="start"></ion-icon>
                 Entfernen
               </ion-button>
-              <ion-button fill="clear" (click)="retakePhoto()" color="medium">
-                <ion-icon name="refresh"></ion-icon>
+              <ion-button fill="clear" (click)="retakePhoto()" color="medium" size="default">
+                <ion-icon name="camera" slot="start"></ion-icon>
                 Neu aufnehmen
               </ion-button>
             </div>
@@ -91,12 +94,13 @@
               *ngIf="isCameraSupported"
               fill="outline"
               (click)="openCamera()"
-              class="camera-button">
+              class="camera-button"
+              size="large">
               <ion-icon name="camera" slot="start"></ion-icon>
               Foto aufnehmen
             </ion-button>
             <p *ngIf="!isCameraSupported" class="camera-not-supported">
-              Kamera wird nicht unterstützt
+              📷 Kamera wird von diesem Gerät nicht unterstützt
             </p>
           </div>
         </div>
