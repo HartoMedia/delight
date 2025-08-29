@@ -99,6 +99,17 @@
               <ion-icon name="camera" slot="start"></ion-icon>
               Foto aufnehmen
             </ion-button>
+
+            <!-- Neuer Upload-Button -->
+            <ion-button
+              fill="outline"
+              (click)="triggerFileUpload()"
+              class="upload-button"
+              size="large">
+              <ion-icon name="image" slot="start"></ion-icon>
+              Bild hochladen
+            </ion-button>
+
             <p *ngIf="!isCameraSupported" class="camera-not-supported">
               📷 Kamera wird von diesem Gerät nicht unterstützt
             </p>

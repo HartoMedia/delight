@@ -20,7 +20,7 @@ import {
 import {Delight, DelightService} from '../services/delight-service';
 import {DelightDetailModalComponent} from '../components/delight-detail-modal/delight-detail-modal.component';
 import {addIcons} from 'ionicons';
-import {camera, close, checkmark, refresh, trash, cameraReverse} from 'ionicons/icons';
+import {camera, close, checkmark, refresh, trash, cameraReverse, image} from 'ionicons/icons';
 
 @Component({
   selector: 'app-home',
@@ -71,7 +71,7 @@ export class HomePage implements OnInit {
     private delightService: DelightService,
     private modalController: ModalController
   ) {
-    addIcons({ camera, close, checkmark, refresh, trash, cameraReverse });
+    addIcons({ camera, close, checkmark, refresh, trash, cameraReverse, image });
   }
 
   ngOnInit() {
@@ -219,8 +219,72 @@ export class HomePage implements OnInit {
     // Konvertiere zu Base64 mit besserer Qualität
     this.capturedImage = canvas.toDataURL('image/jpeg', 0.9);
 
-    // Schließe die Kamera nach dem Foto
+    // Schließe die Kamera nach dem Aufnehmen
     this.closeCamera();
+  }
+
+  // Neue Upload-Funktionen
+  triggerFileUpload() {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.style.display = 'none';
+
+    fileInput.onchange = (event: any) => {
+      const file = event.target.files[0];
+      if (file) {
+        this.handleImageUpload(file);
+      }
+    };
+
+    document.body.appendChild(fileInput);
+    fileInput.click();
+    document.body.removeChild(fileInput);
+  }
+
+  handleImageUpload(file: File) {
+    if (!file || !file.type.startsWith('image/')) {
+      alert('Bitte wählen Sie eine gültige Bilddatei aus.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      const img = new Image();
+      img.onload = () => {
+        // Erstelle Canvas zum Verkleinern des Bildes
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Berechne neue Dimensionen (max 1920x1080)
+        const maxWidth = 1920;
+        const maxHeight = 1080;
+        let { width, height } = img;
+
+        if (width > height) {
+          if (width > maxWidth) {
+            height = (height * maxWidth) / width;
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = (width * maxHeight) / height;
+            height = maxHeight;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+
+        // Zeichne das Bild auf die Canvas
+        ctx?.drawImage(img, 0, 0, width, height);
+
+        // Konvertiere zu Base64
+        this.capturedImage = canvas.toDataURL('image/jpeg', 0.9);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
   }
 
   removePhoto() {
