@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {
@@ -14,13 +14,12 @@ import {
   IonModal,
   IonTextarea,
   IonTitle,
-  IonToolbar,
-  ModalController
+  IonToolbar
 } from '@ionic/angular/standalone';
 import {Delight, DelightService} from '../services/delight-service';
 import {DelightDetailModalComponent} from '../components/delight-detail-modal/delight-detail-modal.component';
 import {addIcons} from 'ionicons';
-import {camera, close, checkmark, refresh, trash, cameraReverse, image} from 'ionicons/icons';
+import {camera, cameraReverse, checkmark, close, image, refresh, trash} from 'ionicons/icons';
 
 @Component({
   selector: 'app-home',
@@ -46,8 +45,8 @@ import {camera, close, checkmark, refresh, trash, cameraReverse, image} from 'io
   ]
 })
 export class HomePage implements OnInit {
-  @ViewChild('video', { static: false }) videoElement!: ElementRef<HTMLVideoElement>;
-  @ViewChild('canvas', { static: false }) canvasElement!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('video', {static: false}) videoElement!: ElementRef<HTMLVideoElement>;
+  @ViewChild('canvas', {static: false}) canvasElement!: ElementRef<HTMLCanvasElement>;
 
   emojis: string[] = ['😀', '😊', '🎉', '❤️', '🌟', '🚀', '🎨', '🌈'];
   isModalOpen = false;
@@ -69,9 +68,8 @@ export class HomePage implements OnInit {
 
   constructor(
     private delightService: DelightService,
-    private modalController: ModalController
   ) {
-    addIcons({ camera, close, checkmark, refresh, trash, cameraReverse, image });
+    addIcons({camera, close, checkmark, refresh, trash, cameraReverse, image});
   }
 
   ngOnInit() {
@@ -153,8 +151,8 @@ export class HomePage implements OnInit {
       this.cameraStream = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: this.currentFacingMode,
-          width: { ideal: 1920 },
-          height: { ideal: 1080 }
+          width: {ideal: 1920},
+          height: {ideal: 1080}
         }
       });
 
@@ -259,7 +257,7 @@ export class HomePage implements OnInit {
         // Berechne neue Dimensionen (max 1920x1080)
         const maxWidth = 1920;
         const maxHeight = 1080;
-        let { width, height } = img;
+        let {width, height} = img;
 
         if (width > height) {
           if (width > maxWidth) {
