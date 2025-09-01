@@ -10,12 +10,30 @@ export class ThemeService {
     this.initializeTheme();
     this.settingsService.settings$.subscribe(settings => {
       this.applyTheme(settings.theme);
+      this.applyDarkMode(settings.darkMode);
     });
   }
 
   initializeTheme(): void {
     const settings = this.settingsService.getSettings();
     this.applyTheme(settings.theme);
+    this.applyDarkMode(settings.darkMode);
+  }
+
+  toggleTheme(isDark: boolean): void {
+    // Der isDark Parameter wird eigentlich nicht benötigt, da wir den aktuellen Zustand togglen
+    this.settingsService.toggleDarkMode();
+  }
+
+  isDarkMode(): boolean {
+    return this.settingsService.isDarkMode();
+  }
+
+  private applyDarkMode(isDark: boolean): void {
+    // Ionic's Dark Mode erwartet die Klasse auf dem html Element
+    document.documentElement.classList.toggle('ion-palette-dark', isDark);
+    // Zusätzlich auch auf dem body für eigene Styles
+    document.body.classList.toggle('dark', isDark);
   }
 
   private applyTheme(theme: 'default' | 'dev'): void {
@@ -129,18 +147,5 @@ export class ThemeService {
 
     // Dev Mode Indikator ausblenden
     root.style.setProperty('--dev-mode-indicator', 'none');
-  }
-
-  // Diese Methoden werden für Kompatibilität mit bestehender Settings-Seite benötigt
-  isDarkMode(): boolean {
-    return document.body.classList.contains('dark');
-  }
-
-  toggleTheme(isDark: boolean): void {
-    if (isDark) {
-      document.body.classList.add('dark');
-    } else {
-      document.body.classList.remove('dark');
-    }
   }
 }

@@ -66,13 +66,11 @@ export class SettingsPage implements OnInit {
   }
 
   ngOnInit() {
-    // Überwache die Settings für Dark Mode
+    // Überwache die Settings für Dark Mode und Dev Mode
     this.settingsService.settings$.subscribe(settings => {
       this.devModeToggle = settings.devMode;
+      this.paletteToggle = settings.darkMode;
     });
-
-    // Get current theme state from service
-    this.paletteToggle = this.themeService.isDarkMode();
 
     // Check if platform is Android
     this.isAndroid = this.platform.is('android');
