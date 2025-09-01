@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { SettingsService } from './settings.service';
 
 export interface Delight {
   id: number;
@@ -29,10 +30,17 @@ export class DelightService {
   private delightsSubject = new BehaviorSubject<Delight[]>([]);
   public delights$ = this.delightsSubject.asObservable();
 
-  private storageKey = 'delights';
+  private get storageKey(): string {
+    return this.settingsService.isDevMode() ? 'delights-dev' : 'delights';
+  }
 
-  constructor() {
+  constructor(private settingsService: SettingsService) {
     this.loadDelights();
+
+    // Beim Wechsel des Entwicklermodus neu laden
+    this.settingsService.settings$.subscribe(() => {
+      this.loadDelights();
+    });
   }
 
   // CREATE - Neues Delight erstellen

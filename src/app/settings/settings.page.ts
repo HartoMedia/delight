@@ -16,12 +16,14 @@ import {
   IonToggle,
   IonLabel,
   IonIcon,
-  AlertController
+  AlertController,
+  IonBadge
 } from '@ionic/angular/standalone';
 import {addIcons} from 'ionicons';
-import {chevronForward, trash} from 'ionicons/icons';
+import {chevronForward, trash, build, warning} from 'ionicons/icons';
 import {ThemeService} from '../services/theme.service';
 import {DelightService} from '../services/delight-service';
+import {SettingsService} from '../services/settings.service';
 
 @Component({
   selector: 'app-settings',
@@ -42,24 +44,33 @@ import {DelightService} from '../services/delight-service';
     IonItem,
     IonToggle,
     IonLabel,
-    IonIcon
+    IonIcon,
+    IonBadge
   ]
 })
 export class SettingsPage implements OnInit {
   paletteToggle = false;
+  devModeToggle = false;
   isAndroid = false;
 
   constructor(
-    private themeService: ThemeService,
     private platform: Platform,
     private router: Router,
+    private themeService: ThemeService,
     private delightService: DelightService,
+    private settingsService: SettingsService,
     private alertController: AlertController
   ) {
-    addIcons({chevronForward, trash});
+    addIcons({chevronForward, trash, build, warning});
+    this.isAndroid = this.platform.is('android');
   }
 
   ngOnInit() {
+    // Überwache die Settings für Dark Mode
+    this.settingsService.settings$.subscribe(settings => {
+      this.devModeToggle = settings.devMode;
+    });
+
     // Get current theme state from service
     this.paletteToggle = this.themeService.isDarkMode();
 
@@ -71,6 +82,10 @@ export class SettingsPage implements OnInit {
   toggleChange(event: CustomEvent) {
     const isDark = event.detail.checked;
     this.themeService.toggleTheme(isDark);
+  }
+
+  toggleDevMode() {
+    this.settingsService.toggleDevMode();
   }
 
   navigateToAbout() {

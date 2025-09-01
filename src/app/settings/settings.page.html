@@ -3,54 +3,93 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Settings</ion-title>
+    <ion-title>Einstellungen</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Settings</ion-title>
+      <ion-title size="large">Einstellungen</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <ion-list-header>Appearance</ion-list-header>
-  <ion-list [inset]="true">
+  <ion-list>
+    <!-- Entwicklermodus Section -->
+    <ion-list-header>
+      <ion-label>Entwicklung</ion-label>
+    </ion-list-header>
+
     <ion-item>
+      <ion-icon name="build" slot="start" color="warning"></ion-icon>
+      <ion-label>
+        <h2>Entwicklermodus</h2>
+        <p>Aktiviert gelbes Farbschema und separaten Datenspeicher</p>
+      </ion-label>
       <ion-toggle
-        [(ngModel)]="paletteToggle"
-        (ionChange)="toggleChange($event)"
-        justify="space-between">
-        Dark Mode
+        slot="end"
+        [(ngModel)]="devModeToggle"
+        (ionChange)="toggleDevMode()"
+        color="warning">
       </ion-toggle>
     </ion-item>
-  </ion-list>
 
-  <ion-list-header>General</ion-list-header>
-  <ion-list [inset]="true">
-    <ion-item [button]="true" (click)="navigateToEmojiConfig()">
-      <ion-label>Emoji Konfiguration</ion-label>
-      <ion-icon name="chevron-forward" slot="end" *ngIf="isAndroid"></ion-icon>
+    <!-- Dev Mode Indicator -->
+    <ion-item *ngIf="devModeToggle" color="warning">
+      <ion-icon name="warning" slot="start"></ion-icon>
+      <ion-label>
+        <h3>Entwicklermodus aktiv</h3>
+        <p>Sie befinden sich im Entwicklermodus mit separatem Datenspeicher</p>
+      </ion-label>
+      <ion-badge color="warning">DEV</ion-badge>
     </ion-item>
-    <ion-item [button]="true">
-      <ion-label>Notifications</ion-label>
-      <ion-icon name="chevron-forward" slot="end" *ngIf="isAndroid"></ion-icon>
-    </ion-item>
-    <ion-item [button]="true">
-      <ion-label>Privacy</ion-label>
-      <ion-icon name="chevron-forward" slot="end" *ngIf="isAndroid"></ion-icon>
-    </ion-item>
-    <ion-item [button]="true" (click)="navigateToAbout()">
-      <ion-label>About</ion-label>
-      <ion-icon name="chevron-forward" slot="end" *ngIf="isAndroid"></ion-icon>
-    </ion-item>
-  </ion-list>
 
-  <ion-list-header>Data Management</ion-list-header>
-  <ion-list [inset]="true">
-    <ion-item [button]="true" (click)="clearAllData()">
+    <!-- Erscheinungsbild Section -->
+    <ion-list-header>
+      <ion-label>Erscheinungsbild</ion-label>
+    </ion-list-header>
+
+    <ion-item>
+      <ion-label>Dunkles Design</ion-label>
+      <ion-toggle
+        slot="end"
+        [(ngModel)]="paletteToggle"
+        (ionChange)="toggleChange($event)">
+      </ion-toggle>
+    </ion-item>
+
+    <!-- Navigation Section -->
+    <ion-list-header>
+      <ion-label>Information</ion-label>
+    </ion-list-header>
+
+    <ion-item button (click)="navigateToAbout()">
+      <ion-label>
+        <h2>Über diese App</h2>
+        <p>Version und weitere Informationen</p>
+      </ion-label>
+      <ion-icon name="chevron-forward" slot="end"></ion-icon>
+    </ion-item>
+
+    <ion-item button (click)="navigateToEmojiConfig()">
+      <ion-label>
+        <h2>Emoji-Konfiguration</h2>
+        <p>Emoji-Einstellungen verwalten</p>
+      </ion-label>
+      <ion-icon name="chevron-forward" slot="end"></ion-icon>
+    </ion-item>
+
+    <!-- Daten Section -->
+    <ion-list-header>
+      <ion-label>Daten</ion-label>
+    </ion-list-header>
+
+    <ion-item button (click)="clearAllData()">
       <ion-icon name="trash" slot="start" color="danger"></ion-icon>
-      <ion-label color="danger">Alle Daten löschen</ion-label>
+      <ion-label color="danger">
+        <h2>Alle Daten löschen</h2>
+        <p>Löscht alle Delights und App-Daten unwiderruflich</p>
+      </ion-label>
     </ion-item>
   </ion-list>
 </ion-content>

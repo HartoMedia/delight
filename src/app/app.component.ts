@@ -26,6 +26,7 @@ import {
   settingsSharp
 } from 'ionicons/icons';
 import { ThemeService } from './services/theme.service';
+import { SettingsService } from './services/settings.service';
 
 @Component({
   selector: 'app-root',
@@ -45,15 +46,19 @@ export class AppComponent implements OnInit {
     versionName: ''
   };
 
-  constructor(private http: HttpClient, private themeService: ThemeService) {
+  constructor(
+    private http: HttpClient,
+    private themeService: ThemeService,
+    private settingsService: SettingsService
+  ) {
     addIcons({
       homeSharp,
       homeOutline,
-      informationCircleSharp,
-      informationCircleOutline,
-      informationCircle,
       settingsSharp,
-      settingsOutline
+      settingsOutline,
+      informationCircle,
+      informationCircleOutline,
+      informationCircleSharp
     });
 
     // Initialize theme on app startup
@@ -61,6 +66,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Services werden automatisch durch Dependency Injection initialisiert
+    // ThemeService und SettingsService starten ihre Überwachung automatisch
     this.loadVersionInfo();
   }
 

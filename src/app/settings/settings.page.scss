@@ -1,0 +1,63 @@
+/* Dev Mode Styles */
+:host {
+  --dev-mode-indicator: none;
+}
+
+/* Dev Mode Badge */
+ion-badge[color="warning"] {
+  --background: var(--ion-color-warning);
+  --color: var(--ion-color-warning-contrast);
+  font-weight: bold;
+}
+
+/* Dev Mode Warning Item */
+ion-item[color="warning"] {
+  --background: rgba(255, 193, 7, 0.1);
+  --border-color: var(--ion-color-warning);
+  border-left: 4px solid var(--ion-color-warning);
+}
+
+/* Dev Mode Visual Indicator */
+.dev-mode-indicator {
+  position: fixed;
+  top: 0;
+  right: 0;
+  background: var(--ion-color-warning);
+  color: var(--ion-color-warning-contrast);
+  padding: 4px 8px;
+  font-size: 10px;
+  font-weight: bold;
+  z-index: 9999;
+  display: var(--dev-mode-indicator, none);
+}
+
+/* Theme-specific adjustments */
+.theme-dev {
+  ion-toolbar {
+    --background: var(--ion-color-primary);
+    --color: var(--ion-color-primary-contrast);
+  }
+
+  ion-tab-bar {
+    --background: #fff8dc;
+    --color-selected: var(--ion-color-primary);
+  }
+
+  /* Show dev mode indicator */
+  --dev-mode-indicator: block;
+}
+
+/* Danger button styling */
+ion-item ion-label[color="danger"] {
+  --color: var(--ion-color-danger);
+}
+
+/* Section headers */
+ion-list-header {
+  padding-top: 20px;
+
+  ion-label {
+    font-weight: 600;
+    color: var(--ion-color-medium);
+  }
+}
